@@ -1,5 +1,5 @@
 // first : build the ul , then you will add the button menu , so you need state to contol the apperance of menu button
-// then : you will add anothe X button
+// then : you will add anothe X button to toggle the menu
 "use client";
 import React, { useState } from "react";
 import Link from "../link";
