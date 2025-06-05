@@ -123,4 +123,8 @@
   .container {
     @apply mx-auto px-4 md:px-8 lg:px-16 xl:px-32;
   }
+  /* here to have the same spaces between the sections */
+  .section-gap {
+    @apply my-8 md:my-16;
+  }
 }
