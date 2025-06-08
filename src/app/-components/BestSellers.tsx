@@ -6,14 +6,14 @@ const BestSellers = async () => {
   // i can deal with db here , because it is server component
   //  npx prisma studio , this is a new localhost to add data to check your connection
   const bestSellers = await db.product.findMany();
-  const size = await db.size.create({
+  const sizes = await db.size.create({
     data: {
       name: "SMALL",
       price: 0,
       productId: "12516353",
     },
   });
-  console.log(size);
+  console.log(sizes);
 
   // const bestSellers = [
   //   {
