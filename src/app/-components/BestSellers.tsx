@@ -5,15 +5,23 @@ import Menu from "@/components/menu";
 const BestSellers = async () => {
   // i can deal with db here , because it is server component
   //  npx prisma studio , this is a new localhost to add data to check your connection
-  const bestSellers = await db.product.findMany();
-  const sizes = await db.size.create({
+  // const bestSellers = await db.product.findMany();
+  // const sizes = await db.size.create({
+  //   data: {
+  //     name: "SMALL",
+  //     price: 0,
+  //     productId: "12516353",
+  //   },
+  // });
+  // console.log(sizes);
+  const extrs = await db.extra.create({
     data: {
-      name: "SMALL",
-      price: 0,
+      name: "ONION",
+      price: 4,
       productId: "12516353",
     },
   });
-  console.log(sizes);
+  console.log(extrs);
 
   // const bestSellers = [
   //   {

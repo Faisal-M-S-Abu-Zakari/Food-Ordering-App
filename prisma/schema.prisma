@@ -31,6 +31,7 @@ model Product {
   updatedAt DateTime @updatedAt
   // كل منتج له اكثر من حجم فبمجرد اضافتك لهذا العمود و عمل حفظ فانه لوحده بينشأ العلاقة
   sizes     Size[]
+  extras    Extra[]
 }
 
 model Size {
@@ -47,4 +48,24 @@ enum ProductSizes {
   SMALL
   MEDUIM
   LARGE
+}
+
+// نفس يلي عملته مع الاحجام بتكرره هان 
+// طبعا انا بفصله في مودل لحال لانه لو لاحظت هتلاقيه بيرندر اسم و سعر يبقى افصله لوحده بيكون ارتب ... نفس الشيء للاحجام
+model Extra {
+  id        String           @id @default(uuid())
+  // هان انا عندي اسماء محددة للاحجام لذلك حددتهم تحت لحتى ما يقبل غيرهم
+  name      ExtraIngrediants
+  price     Float
+  // يتم انشاءها تلقائي عند اضافة العلاقة فوق
+  product   Product          @relation(fields: [productId], references: [id])
+  productId String
+}
+
+enum ExtraIngrediants {
+  CHEESE
+  BACON
+  TOMATO
+  ONION
+  PEPPER
 }
