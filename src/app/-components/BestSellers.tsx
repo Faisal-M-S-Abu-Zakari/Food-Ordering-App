@@ -1,30 +1,34 @@
 import MainHeading from "@/components/main-heading";
-
+import { db } from "@/lib/prisma";
 import Menu from "@/components/menu";
-const BestSellers = () => {
-  const bestSellers = [
-    {
-      id: crypto.randomUUID(),
-      name: "Pizza",
-      description: "this is a pizza",
-      basePrice: 12,
-      image: "/assets/images/pizza.png",
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Pizza",
-      description: "this is a pizza",
-      basePrice: 12,
-      image: "/assets/images/pizza.png",
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "Pizza",
-      description: "this is a pizza",
-      basePrice: 12,
-      image: "/assets/images/pizza.png",
-    },
-  ];
+const BestSellers = async () => {
+  // i can deal with db here , because it is server component
+  //  npx prisma studio , this is a new localhost to add data to check your connection
+  const bestSellers = await db.product.findMany();
+
+  // const bestSellers = [
+  //   {
+  //     id: crypto.randomUUID(),
+  //     name: "Pizza",
+  //     description: "this is a pizza",
+  //     basePrice: 12,
+  //     image: "/assets/images/pizza.png",
+  //   },
+  //   {
+  //     id: crypto.randomUUID(),
+  //     name: "Pizza",
+  //     description: "this is a pizza",
+  //     basePrice: 12,
+  //     image: "/assets/images/pizza.png",
+  //   },
+  //   {
+  //     id: crypto.randomUUID(),
+  //     name: "Pizza",
+  //     description: "this is a pizza",
+  //     basePrice: 12,
+  //     image: "/assets/images/pizza.png",
+  //   },
+  // ];
   return (
     <section className="section-gap">
       <div className="container">
