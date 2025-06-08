@@ -29,4 +29,22 @@ model Product {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  // كل منتج له اكثر من حجم فبمجرد اضافتك لهذا العمود و عمل حفظ فانه لوحده بينشأ العلاقة
+  sizes     Size[]
+}
+
+model Size {
+  id        String       @id @default(uuid())
+  // هان انا عندي اسماء محددة للاحجام لذلك حددتهم تحت لحتى ما يقبل غيرهم
+  name      ProductSizes
+  price     Float
+  // يتم انشاءها تلقائي عند اضافة العلاقة فوق
+  product   Product      @relation(fields: [productId], references: [id])
+  productId String
+}
+
+enum ProductSizes {
+  SMALL
+  MEDUIM
+  LARGE
 }
