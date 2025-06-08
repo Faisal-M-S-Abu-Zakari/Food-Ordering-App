@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1- now i make the schema , but it still not appear on my data base 
+// 2- you need to migrate it , npx prisma migrate dev
+// 3- npx prisma generate , to generate prisma/client to start making query and mutation on DB
+// 4- now , go to lib ==> prisma.ts , this file for making connection function with DB
+model Product {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  image       String
+  // this order for the product , how they will look on app
+  order       Int
+  basePrise   Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
