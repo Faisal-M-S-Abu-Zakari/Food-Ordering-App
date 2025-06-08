@@ -1,10 +1,12 @@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { formateCurrency } from "@/lib/formatters";
+import { Product, Size } from "../../../generated/prisma";
 
 interface ISize {
-  sizes: any;
-  item: any;
+  // this Size and product types from prisma schema , the type should be as the schema name
+  sizes: Size[];
+  item: Product;
 }
 function PickSize({ sizes, item }: ISize) {
   return (
@@ -16,7 +18,7 @@ function PickSize({ sizes, item }: ISize) {
         >
           <RadioGroupItem value="default" id={size.id} />
           <Label htmlFor={size.id}>
-            {size.name} {formateCurrency(size.price + item.basePrice)}
+            {size.name} {formateCurrency(size.price + item.basePrise)}
           </Label>
         </div>
       ))}

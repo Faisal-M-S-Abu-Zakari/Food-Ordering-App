@@ -1,11 +1,14 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { formateCurrency } from "@/lib/formatters";
-interface ISize {
-  extras: any;
-  item: any;
+import { Extra } from "../../../generated/prisma";
+import { productWithRelations } from "@/types/product";
+interface IExtras {
+  // this extra type from prisma schema , the type should be as the schema name
+  extras: Extra[];
 }
-const Extras = ({ extras, item }: ISize) => {
+const Extras = ({ extras }: IExtras) => {
+  console.log(extras);
   return extras.map((extra: any) => (
     <div
       key={extra.id}

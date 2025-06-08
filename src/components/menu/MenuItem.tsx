@@ -1,9 +1,10 @@
 import { formateCurrency } from "@/lib/formatters";
 import Image from "next/image";
 import AddToCartButton from "./AddToCartButton";
+import { productWithRelations } from "@/types/product";
 
 interface IMenuItem {
-  item: any;
+  item: productWithRelations;
 }
 
 const MenuItem = ({ item }: IMenuItem) => {

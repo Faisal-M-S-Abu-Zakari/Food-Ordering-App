@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -13,20 +12,12 @@ import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import PickSize from "./PickSize";
 import Extras from "./Extras";
+import { productWithRelations } from "@/types/product";
 
 interface Item {
-  item: any;
+  item: productWithRelations;
 }
-const sizes = [
-  { id: crypto.randomUUID(), name: "Small", price: 0 },
-  { id: crypto.randomUUID(), name: "Medium", price: 4 },
-  { id: crypto.randomUUID(), name: "Large", price: 8 },
-];
-const extras = [
-  { id: crypto.randomUUID(), name: "Chesse", price: 2 },
-  { id: crypto.randomUUID(), name: "Onion", price: 1 },
-  { id: crypto.randomUUID(), name: "Tomato", price: 1.5 },
-];
+
 const AddToCartButton = ({ item }: Item) => {
   return (
     <Dialog>
@@ -55,13 +46,13 @@ const AddToCartButton = ({ item }: Item) => {
               <Label htmlFor="pick-size" className="text-center block">
                 Pick your size{" "}
               </Label>
-              <PickSize sizes={sizes} item={item} />
+              <PickSize sizes={item.sizes} item={item} />
             </div>
             <div className="space-y-4 text-center">
               <Label htmlFor="add-extras" className="text-center block">
                 Any Extras?
               </Label>
-              <Extras extras={extras} item={item} />
+              <Extras extras={item.extras} />
             </div>
           </div>
           <DialogFooter>
