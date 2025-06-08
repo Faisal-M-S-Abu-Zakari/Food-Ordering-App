@@ -14,5 +14,6 @@ export const getBestSallers = cache(
   //   so here it will cache according to this key , and will revalidate according to this key
   ["best-sellers"],
   //   3600 === 1 hour
+  //   if you want to revalidate the cache before 1 hour ==> ctrl+shift+R
   { revalidate: 3600 }
 );
