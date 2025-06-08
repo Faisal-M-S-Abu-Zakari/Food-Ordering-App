@@ -27,11 +27,15 @@ model Product {
   order       Int
   basePrise   Float
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
   // كل منتج له اكثر من حجم فبمجرد اضافتك لهذا العمود و عمل حفظ فانه لوحده بينشأ العلاقة
-  sizes     Size[]
-  extras    Extra[]
+  sizes      Size[]
+  extras     Extra[]
+  Category   Category       @relation(fields: [categoryId], references: [id])
+  categoryId String
+  // each product has many order product
+  orders     OrderProduct[]
 }
 
 model Size {
@@ -68,4 +72,66 @@ enum ExtraIngrediants {
   TOMATO
   ONION
   PEPPER
+}
+
+// each product has category , so we need to make model , then make relationship with product
+model Category {
+  id       String    @id @default(uuid())
+  name     String
+  order    Int       @default(autoincrement())
+  products Product[]
+}
+
+// to make order , you need user ... so create the user model
+// after creating the order model , you will find that each user has many order . make the relationship between the user and the product that he orderd (the quantity)
+model User {
+  id           String         @id @default(uuid())
+  email        String         @unique
+  password     String
+  name         String
+  image        String?
+  phone        String?
+  streetAdress String?
+  postalCode   String?
+  city         String?
+  country      String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  // each user has many order product
+  orders       OrderProduct[]
+}
+
+// we need order model to render the data in order page , and you will find that we can determine the quantity . so , i need to make relationship with order product 
+model Order {
+  id           String         @id @default(uuid())
+  paid         Boolean        @default(false)
+  subTotal     Float
+  deliveryFee  Float
+  totalPrice   Float
+  userEmail    String
+  phone        String
+  streetAdress String
+  postalCode   String
+  city         String
+  country      String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  // هان ما استدعيت مودل المنتج لانه انا بدي عدد المنتج المطلوبة (التي تم شراءها)
+  products     OrderProduct[]
+}
+
+// فصلتها لوحدها لانه ممكن يكبر معك المشروع لذلك الافضل تفصلها 
+// هان بتمثل عدد الكمية الموجودة من هذا المنتج
+model OrderProduct {
+  id        String  @id @default(uuid())
+  quantity  Int
+  // each order will have many quantity
+  Order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  // في التطبيق ممكن الزائر برضو يطلب منتج و يشتريه لذلك مش اجباري يكون اله حساب مسجل 
+  User      User?   @relation(fields: [userId], references: [id])
+  userId    String?
+  //each product will have many order (quantity)
+  Product   Product @relation(fields: [productId], references: [id])
+  productId String
 }
