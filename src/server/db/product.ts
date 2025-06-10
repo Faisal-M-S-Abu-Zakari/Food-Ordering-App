@@ -1,6 +1,24 @@
 import { cache } from "@/lib/cache";
 import { db } from "@/lib/prisma";
 
+export const getProductsByCategory = cache(
+  () => {
+    const categories = db.category.findMany({
+      include: {
+        products: {
+          include: {
+            sizes: true,
+            extras: true,
+          },
+        },
+      },
+    });
+    return categories;
+  },
+  ["products-by-category "],
+  { revalidate: 3600 }
+);
+
 export const getBestSallers = cache(
   (limit?: number | undefined) => {
     const bestSallers = db.product.findMany({
