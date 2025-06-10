@@ -17,7 +17,7 @@ import { productWithRelations } from "@/types/product";
 import { useAppSelector } from "@/redux/hooks";
 import { selectCartItem } from "@/redux/features/cart/cartSlice";
 import { useState } from "react";
-import { ProductSizes, Size } from "../../../generated/prisma";
+import { Extra, ProductSizes, Size } from "../../../generated/prisma";
 
 interface Item {
   item: productWithRelations;
@@ -38,6 +38,9 @@ const AddToCartButton = ({ item }: Item) => {
     // 6- add ! to tell it that will return sth , not undefined
     defaultSize!
   );
+  const defaultExtra = cart.find((el) => el.id === item.id)?.extras || [];
+  const [selectedExtras, setSelecedtExtras] = useState<Extra[]>(defaultExtra!);
+
   return (
     <Dialog>
       <form>
@@ -76,7 +79,11 @@ const AddToCartButton = ({ item }: Item) => {
               <Label htmlFor="add-extras" className="text-center block">
                 Any Extras?
               </Label>
-              <Extras extras={item.extras} />
+              <Extras
+                extras={item.extras}
+                selectedExtras={selectedExtras}
+                setSelecedtExtras={setSelecedtExtras}
+              />
             </div>
           </div>
           <DialogFooter>
