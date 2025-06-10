@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,12 +14,30 @@ import { Label } from "@/components/ui/label";
 import PickSize from "./PickSize";
 import Extras from "./Extras";
 import { productWithRelations } from "@/types/product";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCartItem } from "@/redux/features/cart/cartSlice";
+import { useState } from "react";
+import { ProductSizes, Size } from "../../../generated/prisma";
 
 interface Item {
   item: productWithRelations;
 }
 
 const AddToCartButton = ({ item }: Item) => {
+  // 3- daclare the cart , useAppSelector(state=>state.cart.items)
+
+  const cart = useAppSelector(selectCartItem);
+  // 2- the default size will be small , to use it .. i have to declare the cart
+  const defaultSize =
+    // 4-in the cart there is one or more item , so i have to declare in which item i deal or open , so i will map on cart to find the item according to its id then take the size that chossen
+    cart.find((el) => el.id === item.id)?.Size ||
+    // 5- or select the small as default , if user doesn't select any size
+    item.sizes.find((size) => size.name === ProductSizes.SMALL);
+  // 1- i need state to save the selected size , then i have to define the default size
+  const [selectedSize, setSelecedtSize] = useState<Size>(
+    // 6- add ! to tell it that will return sth , not undefined
+    defaultSize!
+  );
   return (
     <Dialog>
       <form>
@@ -46,7 +65,12 @@ const AddToCartButton = ({ item }: Item) => {
               <Label htmlFor="pick-size" className="text-center block">
                 Pick your size{" "}
               </Label>
-              <PickSize sizes={item.sizes} item={item} />
+              <PickSize
+                sizes={item.sizes}
+                item={item}
+                selectedSize={selectedSize}
+                setSelecedtSize={setSelecedtSize}
+              />
             </div>
             <div className="space-y-4 text-center">
               <Label htmlFor="add-extras" className="text-center block">
