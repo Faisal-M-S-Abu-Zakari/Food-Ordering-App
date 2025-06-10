@@ -2,6 +2,7 @@ import React from "react";
 import Link from "../link";
 import { Routes } from "@/constants/enums";
 import NavBar from "./NavBar";
+import CartButton from "./CartButton";
 
 const Header = () => {
   return (
@@ -17,6 +18,7 @@ const Header = () => {
           🍕 Pizza
         </Link>
         <NavBar />
+        <CartButton />
       </div>
     </header>
   );
