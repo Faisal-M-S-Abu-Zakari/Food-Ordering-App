@@ -1,7 +1,22 @@
 import { RootState } from "@/redux/store";
 import { createSlice } from "@reduxjs/toolkit";
+import { Extra, Size } from "../../../../generated/prisma";
 
-const initialState = {
+// here i will declare only the parts of item that will appear in cart
+export type CartItem = {
+  name: string;
+  id: string;
+  image: string;
+  basePrise: number;
+  quantity?: number;
+  Size?: Size;
+  extras?: Extra[];
+};
+// then i declare type for all items to use it in initial state
+type CartState = {
+  items: CartItem[];
+};
+const initialState: CartState = {
   items: [],
 };
 export const cartSlice = createSlice({

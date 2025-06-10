@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/footer";
+import ReduxProvider from "@/providers/ReduxProvider";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -25,9 +26,11 @@ export default function RootLayout({
     <html lang="en">
       {/* i use tailwind css , so i will className keyword to apply the font */}
       <body className={`${roboto.className} antialiased`}>
-        <Header />
-        {children}
-        <Footer />
+        <ReduxProvider>
+          <Header />
+          {children}
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   );
