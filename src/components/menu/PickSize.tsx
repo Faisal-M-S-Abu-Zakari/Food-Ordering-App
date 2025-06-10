@@ -11,6 +11,7 @@ interface ISize {
   sizes: Size[];
   item: productWithRelations;
   selectedSize: Size;
+  // if i put the mouse on it in the previous component , it will give you its type
   setSelecedtSize: React.Dispatch<React.SetStateAction<Size>>;
 }
 function PickSize({ sizes, item, selectedSize, setSelecedtSize }: ISize) {
