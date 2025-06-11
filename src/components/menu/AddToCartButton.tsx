@@ -18,6 +18,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectCartItem } from "@/redux/features/cart/cartSlice";
 import { useState } from "react";
 import { Extra, ProductSizes, Size } from "../../../generated/prisma";
+import { formateCurrency } from "@/lib/formatters";
 
 interface Item {
   item: productWithRelations;
@@ -40,7 +41,20 @@ const AddToCartButton = ({ item }: Item) => {
   );
   const defaultExtra = cart.find((el) => el.id === item.id)?.extras || [];
   const [selectedExtras, setSelecedtExtras] = useState<Extra[]>(defaultExtra!);
-
+  // here i want to handle the total price to be affected with extras and sizes
+  let totalPrice = item.basePrise;
+  // here if the user select size , then change the total
+  if (selectedSize) {
+    totalPrice += selectedSize.price;
+  }
+  // if the user add any extra to the extras array , then loop on the array and add the extra price of each selected extras to the total
+  if (selectedExtras.length > 0) {
+    for (const extra of selectedExtras) {
+      totalPrice += extra.price;
+    }
+  }
+  // this function will dispatch action , that will add item to cart
+  const handleAddToCart = () => {};
   return (
     <Dialog>
       <form>
@@ -87,8 +101,13 @@ const AddToCartButton = ({ item }: Item) => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" className="w-full h-10">
-              Add to cart
+            {/* this button when i click on it , it should add item to the cart */}
+            <Button
+              onClick={handleAddToCart}
+              type="submit"
+              className="w-full h-10"
+            >
+              Add to cart {formateCurrency(totalPrice)}
             </Button>
           </DialogFooter>
         </DialogContent>

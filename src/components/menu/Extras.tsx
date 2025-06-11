@@ -11,6 +11,9 @@ interface IExtras {
 }
 const Extras = ({ extras, selectedExtras, setSelecedtExtras }: IExtras) => {
   const handleExtra = (extra: Extra) => {
+    // there is two setuation :
+    // 1- if the element is selected and you click on it another time to remove it
+    // 2- else the element not selected yet and you want to select it again
     if (selectedExtras.find((e) => e.id === extra.id)) {
       const filteredSelectedExtras = selectedExtras.filter(
         (item) => item.id !== extra.id
