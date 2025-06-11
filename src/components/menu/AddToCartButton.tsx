@@ -14,11 +14,13 @@ import { Label } from "@/components/ui/label";
 import PickSize from "./PickSize";
 import Extras from "./Extras";
 import { productWithRelations } from "@/types/product";
-import { useAppSelector } from "@/redux/hooks";
-import { selectCartItem } from "@/redux/features/cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addCartItem, selectCartItem } from "@/redux/features/cart/cartSlice";
 import { useState } from "react";
 import { Extra, ProductSizes, Size } from "../../../generated/prisma";
 import { formateCurrency } from "@/lib/formatters";
+import { getItemQuantity } from "@/lib/Cart";
+import ChooseQuantity from "./ChooseQuantity";
 
 interface Item {
   item: productWithRelations;
@@ -54,7 +56,26 @@ const AddToCartButton = ({ item }: Item) => {
     }
   }
   // this function will dispatch action , that will add item to cart
-  const handleAddToCart = () => {};
+  // 1- i don't have dispatch so i need to declare the dispatch
+  const dispatch = useAppDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(
+      addCartItem({
+        // i don't need to send the quantity , because the action will handle it
+        basePrise: item.basePrise,
+        id: item.id,
+        name: item.name,
+        image: item.image,
+        Size: selectedSize,
+        extras: selectedExtras,
+      })
+    );
+  };
+
+  // i need to update the add button to render the quantity of item if i select it
+  // so , i need to make function for get the quantity of item
+  const itemQuantity = getItemQuantity(item.id, cart);
   return (
     <Dialog>
       <form>
@@ -62,7 +83,7 @@ const AddToCartButton = ({ item }: Item) => {
           <Button
             type="button"
             size={"lg"}
-            className="mt-4 text-white rounded-full !px-8"
+            className="mt-4 text-white rounded-full !px-8 cursor-pointer"
           >
             <span>Add To Cart</span>
           </Button>
@@ -102,13 +123,22 @@ const AddToCartButton = ({ item }: Item) => {
           </div>
           <DialogFooter>
             {/* this button when i click on it , it should add item to the cart */}
-            <Button
-              onClick={handleAddToCart}
-              type="submit"
-              className="w-full h-10"
-            >
-              Add to cart {formateCurrency(totalPrice)}
-            </Button>
+            {itemQuantity === 0 ? (
+              <Button
+                onClick={handleAddToCart}
+                type="submit"
+                className="w-full h-10 cursor-pointer"
+              >
+                Add to cart {formateCurrency(totalPrice)}
+              </Button>
+            ) : (
+              <ChooseQuantity
+                item={item}
+                selectedExtras={selectedExtras}
+                selectedSize={selectedSize}
+                quantity={itemQuantity}
+              />
+            )}
           </DialogFooter>
         </DialogContent>
       </form>
