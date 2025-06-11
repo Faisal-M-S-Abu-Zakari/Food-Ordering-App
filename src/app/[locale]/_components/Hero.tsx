@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import pizza from "../../../public/assets/images/pizza.png";
+import pizza from "../../../../public/assets/images/pizza.png";
 import Link from "@/components/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Routes } from "@/constants/enums";

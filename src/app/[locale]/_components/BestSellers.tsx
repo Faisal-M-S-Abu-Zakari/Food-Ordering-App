@@ -1,6 +1,7 @@
 import MainHeading from "@/components/main-heading";
 import Menu from "@/components/menu";
 import { getBestSallers } from "@/server/db/product";
+
 const BestSellers = async () => {
   const bestSellers = await getBestSallers(3);
 

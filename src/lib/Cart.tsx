@@ -1,4 +1,4 @@
-import CartItems from "@/app/cart/_components/CartItems";
+import CartItems from "@/app/[locale]/cart/_components/CartItems";
 import { CartItem } from "@/redux/features/cart/cartSlice";
 
 // this function will return single value
