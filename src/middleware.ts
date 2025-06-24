@@ -4,6 +4,30 @@
 // هذه الفنكشن هيتعرف عليها النكست و يبدا يشغلها
 
 import { NextRequest, NextResponse } from "next/server";
+import { match as matchLocale } from "@formatjs/intl-localematcher";
+import Negotiator from "negotiator";
+import { i18n, LanguageType, Locale } from "./i18n.config";
+
+// this function must get the current locale , E.X : en or ar
+// الحين لو رحت على بورت 3000 مش هتلاقي اي صفحة تعرها و ذلك لانك استخدمت داينميك راوت
+// يبقى بيلزمك فنكشن تعمل redirect
+// @formatjs/intl-localematcher and negotiator ==> these packages i should use to get the localization
+function getLocale(request: NextRequest): string | undefined {
+  const negotiatorHeaders: Record<string, string> = {};
+  request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
+
+  const locales: LanguageType[] = i18n.locales;
+  const languages = new Negotiator({ headers: negotiatorHeaders }).languages();
+  let locale = "";
+
+  try {
+    locale = matchLocale(languages, locales, i18n.defaultLocale);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  } catch (error: any) {
+    locale = i18n.defaultLocale;
+  }
+  return locale;
+}
 
 // this function will has request , so it will return response
 // request will contain searchparams and headers , searchparams may carry en or ar lang
@@ -14,6 +38,15 @@ export const middleware = async (request: NextRequest) => {
   const requestHeaders = new Headers(request.headers);
   //   here when i call the "x-url" header in amy server component will return the url for the request , E.X : if i call the "x-url" header in home page will return the url for home page
   requestHeaders.set("x-url", request.url);
+  const pathname = request.nextUrl.pathname;
+
+  const pathnameIsMissingLocale = i18n.locales.every(
+    (locale) => !pathname.startsWith(`/${locale}`)
+  );
+  if (pathnameIsMissingLocale) {
+    const locale = getLocale(request);
+    return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url));
+  }
   return NextResponse.next({
     // then i pass the request headers
     // so the request will carry group of headers (requestHeaders)

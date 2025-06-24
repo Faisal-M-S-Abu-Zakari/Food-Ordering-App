@@ -6,11 +6,40 @@ import Link from "../link";
 import { Pages, Routes } from "@/constants/enums";
 import { Button, buttonVariants } from "../ui/button";
 import { Menu, XIcon } from "lucide-react";
-import { links } from "@/constants/links";
+import { useParams, usePathname } from "next/navigation";
 
-const NavBar = () => {
+const NavBar = ({
+  translations,
+}: {
+  translations: { [key: string]: string };
+}) => {
   const [openMenu, setOpenMenu] = useState(false);
-
+  // in client component i use "useParams" to get the locale from url
+  const { locale } = useParams();
+  // here i call the pathname to use it to style the active page
+  const pathname = usePathname();
+  const links = [
+    {
+      id: crypto.randomUUID(),
+      title: translations.menu,
+      href: Routes.MENU,
+    },
+    {
+      id: crypto.randomUUID(),
+      title: translations.about,
+      href: Routes.ABOUT,
+    },
+    {
+      id: crypto.randomUUID(),
+      title: translations.contact,
+      href: Routes.CONTACT,
+    },
+    {
+      id: crypto.randomUUID(),
+      title: translations.login,
+      href: `${Routes.AUTH}/${Pages.LOGIN}`,
+    },
+  ];
   return (
     <nav className="flex-1 justify-end flex">
       {/* it will appear only in small screen */}
@@ -44,13 +73,19 @@ const NavBar = () => {
             {/* here all links has the same style , but the login link it look like button so i will use shadcn library  */}
             {/* so i will add condition , and give it a specific design */}
             <Link
-              href={`/${link.href}`}
+              // لازم تحدد اللوكل لحتى لما تعمل انتقالات بين الصفحات تظل اللغة المستخدمة ثابتة و ما تتغير
+              href={`/${locale}/${link.href}`}
               className={`${
                 // link.href === `${Routes.AUTH}/${Pages.LOGIN}` it is the same link.href="login" , but i use enums so i should do it like that
                 link.href === `${Routes.AUTH}/${Pages.LOGIN}`
                   ? `${buttonVariants({ size: "lg" })} !px-8 !rounded-full`
                   : "text-accent hover:text-primary duration-200 transition-colors "
-              } font-semibold`}
+              } font-semibold ${
+                pathname.startsWith(`/${locale}/${link.href}`)
+                  ? "text-primary"
+                  : "text-accent"
+              }
+              `}
             >
               {link.title}
             </Link>
