@@ -15,6 +15,7 @@ const NavBar = ({
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
   // in client component i use "useParams" to get the locale from url
+  // this help me to make the redirect correct when i click on link
   const { locale } = useParams();
   // here i call the pathname to use it to style the active page
   const pathname = usePathname();

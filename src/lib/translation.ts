@@ -8,6 +8,7 @@ const dictionaries = {
   en: () => import("@/dictionaries/en.json").then((module) => module.default),
 };
 
+// هان بدك تشوف اش اللوكل لحتى تحدد اللغة المستخدمة
 const getTrans = async (locale: Locale) => {
   return locale === Languages.ARABIC ? dictionaries.ar() : dictionaries.en();
 };

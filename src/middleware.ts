@@ -38,6 +38,8 @@ export const middleware = async (request: NextRequest) => {
   const requestHeaders = new Headers(request.headers);
   //   here when i call the "x-url" header in amy server component will return the url for the request , E.X : if i call the "x-url" header in home page will return the url for home page
   requestHeaders.set("x-url", request.url);
+
+  // redirect phase :
   const pathname = request.nextUrl.pathname;
 
   const pathnameIsMissingLocale = i18n.locales.every(
@@ -47,6 +49,7 @@ export const middleware = async (request: NextRequest) => {
     const locale = getLocale(request);
     return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url));
   }
+
   return NextResponse.next({
     // then i pass the request headers
     // so the request will carry group of headers (requestHeaders)
