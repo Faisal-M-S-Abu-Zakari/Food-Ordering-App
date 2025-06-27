@@ -12,7 +12,7 @@ type i18nType = {
 
 // هان انشأت متغير
 export const i18n: i18nType = {
-  defaultLocale: Languages.ARABIC,
+  defaultLocale: Languages.ENGLISH,
   // here i put the locales that i use in my app
   locales: [Languages.ARABIC, Languages.ENGLISH],
 };

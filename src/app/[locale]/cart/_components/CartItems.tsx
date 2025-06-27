@@ -12,13 +12,15 @@ import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect } from "react";
 
-const CartItems = () => {
+function CartItems() {
   const cart = useAppSelector(selectCartItem);
   const dispatch = useAppDispatch();
   const subTotal = getSubTotal(cart);
+
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cart));
   }, [cart]);
+
   return (
     <div>
       {cart && cart.length > 0 ? (
@@ -108,6 +110,6 @@ const CartItems = () => {
       )}
     </div>
   );
-};
+}
 
 export default CartItems;
