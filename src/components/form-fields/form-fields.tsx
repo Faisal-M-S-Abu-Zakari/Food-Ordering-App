@@ -25,7 +25,7 @@ const FormFields = (props: Props) => {
     }
 
     if (type === InputTypes.CHECKBOX) {
-      return <Checkbox {...props} />;
+      // return <Checkbox {...props} />;
     }
     // this is the default if there is another type
     return <TextField {...props} />;

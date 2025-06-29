@@ -6,6 +6,7 @@ import { Locale } from "@/i18n.config";
 import ReduxProvider from "@/providers/ReduxProvider";
 import { Metadata } from "next";
 import { Cairo, Roboto } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Food Ordering App",
@@ -52,6 +53,7 @@ export default async function RootLayout({
           <Header />
           {children}
           <Footer />
+          <Toaster />
         </ReduxProvider>
       </body>
     </html>

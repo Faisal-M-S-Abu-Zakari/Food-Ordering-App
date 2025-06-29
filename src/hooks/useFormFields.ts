@@ -1,10 +1,11 @@
 import { Pages } from "@/constants/enums";
 import { IFormFieldsVariables, IFormField } from "@/types/app";
+import { Translations } from "@/types/translations";
 
 // Props interface extends IFormFieldsVariables (which provides 'slug')
 // and adds a 'translation' property for localization support.
 interface Props extends IFormFieldsVariables {
-  translation: any; // Used for translations, can be typed more strictly if needed
+  translation: Translations; // Used for translations, can be typed more strictly if needed
 }
 
 /**
@@ -18,18 +19,44 @@ const useFormFields = ({ slug, translation }: Props) => {
   // Each object describes a single input field.
   const loginFields = (): IFormField[] => [
     {
-      label: "Email", // Field label (can be replaced with translation)
+      label: translation.auth.login.email.label, // Field label (can be replaced with translation)
       name: "email", // Field name (used in form state)
       type: "email", // Input type
-      placeholder: "enter your email", // Placeholder text
+      placeholder: translation.auth.login.email.placeholder, // Placeholder text
       autoFocus: true, // Autofocus this field when form loads
     },
     {
-      label: "Password",
+      label: translation.auth.login.password.label,
       name: "password",
       type: "password",
-      placeholder: "enter your password",
+      placeholder: translation.auth.login.password.placeholder,
+    },
+  ];
+  const signUpFields = (): IFormField[] => [
+    {
+      label: translation.auth.register.name.label,
+      name: "name",
+      type: "text",
+      placeholder: translation.auth.register.name.placeholder,
       autoFocus: true,
+    },
+    {
+      label: translation.auth.register.email.label,
+      name: "email",
+      type: "email",
+      placeholder: translation.auth.register.email.placeholder,
+    },
+    {
+      label: translation.auth.register.password.label,
+      name: "password",
+      type: "password",
+      placeholder: translation.auth.register.password.placeholder,
+    },
+    {
+      label: translation.auth.register.confirmPassword.label,
+      name: "confirmPassword",
+      type: "password",
+      placeholder: translation.auth.register.confirmPassword.placeholder,
     },
   ];
 
@@ -42,6 +69,8 @@ const useFormFields = ({ slug, translation }: Props) => {
       case Pages.LOGIN:
         return loginFields();
       // Add more cases for other forms as needed
+      case Pages.Register:
+        return signUpFields();
       default:
         return []; // Return empty array if no matching form
     }

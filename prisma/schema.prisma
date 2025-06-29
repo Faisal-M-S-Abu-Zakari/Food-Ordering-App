@@ -99,6 +99,8 @@ model User {
   updatedAt    DateTime       @updatedAt
   // each user has many order product
   orders       OrderProduct[]
+  accounts     Account[]
+  session      Session[]
 }
 
 // we need order model to render the data in order page , and you will find that we can determine the quantity . so , i need to make relationship with order product 
@@ -134,4 +136,47 @@ model OrderProduct {
   //each product will have many order (quantity)
   Product   Product @relation(fields: [productId], references: [id])
   productId String
+}
+
+// now to use nextAuth with prisma to allow user to login , i have to declare : 
+// these model i gett them from nextAuth then i go to adapter and choose prisma
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+// this is for user session
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+//  this for expire for the token itself , not for session
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }
