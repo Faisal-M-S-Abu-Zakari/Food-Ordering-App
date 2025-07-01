@@ -45,9 +45,15 @@ const Form = ({ translations }: { translations: Translations }) => {
   // بالعامية انا بدي اياها تطلع الرسالة لما يكون الخطأ بجزئية الداتا بيز مش الفاليديشن
   useEffect(() => {
     if (state.status && state.message) {
-      toast(state.message, {
-        className: state.status === 201 ? "text-green-400" : "text-destructive",
-      });
+      toast(
+        <span
+          className={
+            state.status === 201 ? "text-green-400" : "text-destructive"
+          }
+        >
+          {state.message}
+        </span>
+      );
     }
     if (state.status === 201) {
       // you can use push if you like , in the signin form i use push

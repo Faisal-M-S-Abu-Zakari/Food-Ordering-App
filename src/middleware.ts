@@ -9,7 +9,7 @@ import Negotiator from "negotiator";
 import { i18n, LanguageType, Locale } from "./i18n.config";
 import { withAuth } from "next-auth/middleware";
 import { getToken } from "next-auth/jwt";
-import { Pages, Routes } from "./constants/enums";
+import { Pages, Routes, UserRole } from "./constants/enums";
 import { redirect } from "next/navigation";
 
 function getLocale(request: NextRequest): string | undefined {
@@ -56,6 +56,8 @@ export default withAuth(
         new URL(`/${locale}${pathname}`, request.url)
       );
     }
+    // ***************** guarded route *************************
+
     // to know if user logged in , check if there is token
     // and pass the request from the middleware to the token function
     // because the token is inside the request , so if i want to get them i should pass request
@@ -79,12 +81,41 @@ export default withAuth(
         new URL(`/${currentLocale}/${Routes.AUTH}/${Pages.LOGIN}`, request.url)
       );
     }
+    // يعني هان لحتى توجه المستخدم حسب الرول تبعه اما للادمن او البروفايل
     // here if user is loggedIn and try to access protected pages so redirect him to profile page
     // now after redirect the user to profile page , if he try to change the url to access signup page , it will redirect him to profile . Because when you login , the token will be found so you have to log out to access log in page for another time
     if (isAuthPage && isAuth) {
+      const role = isAuth.role;
+      // if he is admin so redirect to admin page
+      if (role === UserRole.ADMIN) {
+        return NextResponse.redirect(
+          new URL(`/${currentLocale}/${Routes.ADMIN}`, request.url)
+        );
+      }
       return NextResponse.redirect(
         new URL(`/${currentLocale}/${Routes.PROFILE}`, request.url)
       );
+    }
+    // هان لو حاول يروح على الادمن بيج و هو مش ادمن
+    // if user logged in and he isn't admin and try to access admin page
+    // here if the role admin then redirect to admin
+    if (isAuth && pathname.startsWith(`/${currentLocale}/${Routes.ADMIN}`)) {
+      // i can't access role here , so i should determine it in callback fn in server/auth then it will appear here
+      const role = isAuth.role;
+      if (role !== UserRole.ADMIN) {
+        return NextResponse.redirect(
+          new URL(`/${currentLocale}/${Routes.PROFILE}`, request.url)
+        );
+      }
+    }
+    // هان اذا كان ادمن و بيحاول يوصل للبروفايل , راح توجهه للادمن بيج
+    if (isAuth && pathname.startsWith(`/${currentLocale}/${Routes.PROFILE}`)) {
+      const role = isAuth.role;
+      if (role !== UserRole.USER) {
+        return NextResponse.redirect(
+          new URL(`/${currentLocale}/${Routes.ADMIN}`, request.url)
+        );
+      }
     }
     return response;
   },

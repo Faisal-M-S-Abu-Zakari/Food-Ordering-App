@@ -7,6 +7,7 @@ import ReduxProvider from "@/providers/ReduxProvider";
 import { Metadata } from "next";
 import { Cairo, Roboto } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import NextAuthSessionProvider from "@/providers/NextAuthSessionProvider";
 
 export const metadata: Metadata = {
   title: "Food Ordering App",
@@ -49,12 +50,14 @@ export default async function RootLayout({
           locale === Languages.ARABIC ? cairo.className : roboto.className
         }
       >
-        <ReduxProvider>
-          <Header />
-          {children}
-          <Footer />
-          <Toaster />
-        </ReduxProvider>
+        <NextAuthSessionProvider>
+          <ReduxProvider>
+            <Header />
+            {children}
+            <Footer />
+            <Toaster />
+          </ReduxProvider>
+        </NextAuthSessionProvider>
       </body>
     </html>
   );

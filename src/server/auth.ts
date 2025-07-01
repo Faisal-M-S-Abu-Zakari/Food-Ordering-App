@@ -1,12 +1,97 @@
 import { Environments, Pages, Routes } from "@/constants/enums";
 import { db } from "@/lib/prisma";
-import { type NextAuthOptions } from "next-auth";
+import { DefaultSession, type NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { login } from "./_actions/auth";
 import { Locale } from "@/i18n.config";
+import { User, UserRole } from "../../generated/prisma";
+import { JWT } from "next-auth/jwt";
+
+// the default jwt doesn,t contain role , so i override it to include role
+declare module "next-auth/jwt" {
+  // here it will extend the user but i make it optional (Partial)
+  interface JWT extends Partial<User> {
+    // here the data that i need from User , not all the user only the data that i write it here
+    id: string;
+    name: string;
+    email: string;
+    role: UserRole;
+  }
+}
+
+// in the session inside callbacks , it will make error if i didn't declare this
+// because the user might be undefined , so i extend the session from the defaultSession and add user to it ==> to say that the session will has user
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user: User;
+  }
+}
 
 export const authOptions: NextAuthOptions = {
+  // the idea from it that user session must include role , to use it in middleware
+  callbacks: {
+    // the jwt is the first step before the session
+    // now the JWT type doesn't contain role so i add it above
+    jwt: async ({ token }): Promise<JWT> => {
+      // fetch the user from db
+      const dbUser = await db.user.findUnique({
+        where: {
+          email: token?.email,
+        },
+      });
+      // if there is no user then return the default token
+      if (!dbUser) {
+        return token;
+      }
+      // if user exist then return user data
+      // the data that i provide it here in jwt , will be in session
+      // so , any user data that you will need must write it here first
+      return {
+        id: dbUser.id,
+        name: dbUser.name,
+        email: dbUser.email,
+        role: dbUser.role,
+        image: dbUser.image,
+        city: dbUser.city,
+        country: dbUser.country,
+        phone: dbUser.phone,
+        postalCode: dbUser.postalCode,
+        streetAddress: dbUser.streetAdress,
+      };
+    },
+    // the token here is come from the jwt
+    session: ({ session, token }) => {
+      if (token) {
+        // at the begining the session.user will have [email , image , name ]
+        // so i add these data to session
+        session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.role = token.role;
+        session.user.image = token.image as string;
+        session.user.country = token.country as string;
+        session.user.city = token.city as string;
+        session.user.postalCode = token.postalCode as string;
+        session.user.streetAdress = token.streetAddress as string;
+        session.user.phone = token.phone as string;
+      }
+      // after i determine the session i will return it , and return the user
+      return {
+        // لو انا مش مسجل دخول هيرجع السيشن
+        ...session,
+        // لو مسجل دخول هيعمل اوفر رايد على اليوزر و يرجع الداتا يلي بداخله
+        user: {
+          ...session.user,
+          id: token.id,
+          name: token.name,
+          email: token.email,
+          role: token.role,
+          image: token.image,
+        },
+      };
+    },
+  },
   session: {
     strategy: "jwt",
     maxAge: 7 * 24 * 60 * 60,

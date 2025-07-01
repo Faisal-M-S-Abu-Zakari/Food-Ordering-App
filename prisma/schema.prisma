@@ -95,12 +95,18 @@ model User {
   postalCode   String?
   city         String?
   country      String?
+  role         UserRole       @default(USER)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   // each user has many order product
   orders       OrderProduct[]
   accounts     Account[]
   session      Session[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
 
 // we need order model to render the data in order page , and you will find that we can determine the quantity . so , i need to make relationship with order product 

@@ -54,16 +54,16 @@ const Form = ({ translations }: { translations: Translations }) => {
         // the second type of error which is error in DB
         const responseError = JSON.parse(res?.error).responseError;
         if (responseError) {
-          toast(responseError, {
-            className: "text-destructive",
-          });
+          toast(<span className="text-destructive">{responseError}</span>);
         }
       }
       // if the result ok , show the toast and redirect to root page
       if (res?.ok) {
-        toast(translations.messages.loginSuccessful, {
-          className: "text-green-400",
-        });
+        toast(
+          <span className="text-green-400">
+            {translations.messages.loginSuccessful}
+          </span>
+        );
         router.push(`/${locale}/${Routes.PROFILE}`);
       }
     } catch (error) {
