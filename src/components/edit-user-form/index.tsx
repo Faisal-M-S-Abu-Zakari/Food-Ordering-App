@@ -78,9 +78,15 @@ const EditUserForm = ({
   // هان لما تتعدل البيانات في الستايت راح يظهر الك توست
   useEffect(() => {
     if (state.message && state.status && !pending) {
-      toast(state.message, {
-        className: state.status === 200 ? "text-green-400" : "text-destructive",
-      });
+      toast(
+        <span
+          className={
+            `${state.status === 200}` ? "text-green-400" : "text-destructive"
+          }
+        >
+          {state.message}
+        </span>
+      );
     }
   }, [pending, state.message, state.status]);
 
@@ -143,8 +149,8 @@ const EditUserForm = ({
             />
           </div>
         )}
-        <Button type="submit" className="w-full">
-          {pending ? <Loader /> : "translations.save"}
+        <Button type="submit" className="w-full cursor-pointer">
+          {pending ? <Loader /> : translations.save}
         </Button>
       </div>
     </form>

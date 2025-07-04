@@ -1,6 +1,5 @@
 import cloudinary from "@/lib/cloudinary";
 import { NextResponse } from "next/server";
-import { url } from "node:inspector/promises";
 
 type FormDataFile = Blob & {
   name?: string; // optional : some browsers may add this
