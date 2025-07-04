@@ -109,14 +109,15 @@ export default withAuth(
       }
     }
     // هان اذا كان ادمن و بيحاول يوصل للبروفايل , راح توجهه للادمن بيج
-    if (isAuth && pathname.startsWith(`/${currentLocale}/${Routes.PROFILE}`)) {
-      const role = isAuth.role;
-      if (role !== UserRole.USER) {
-        return NextResponse.redirect(
-          new URL(`/${currentLocale}/${Routes.ADMIN}`, request.url)
-        );
-      }
-    }
+    // i stop this condition , because i write it in the profile page
+    // if (isAuth && pathname.startsWith(`/${currentLocale}/${Routes.PROFILE}`)) {
+    //   const role = isAuth.role;
+    //   if (role !== UserRole.USER) {
+    //     return NextResponse.redirect(
+    //       new URL(`/${currentLocale}/${Routes.ADMIN}`, request.url)
+    //     );
+    //   }
+    // }
     return response;
   },
   {

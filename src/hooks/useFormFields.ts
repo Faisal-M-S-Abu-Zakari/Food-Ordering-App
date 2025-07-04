@@ -1,4 +1,4 @@
-import { Pages } from "@/constants/enums";
+import { Pages, Routes } from "@/constants/enums";
 import { IFormFieldsVariables, IFormField } from "@/types/app";
 import { Translations } from "@/types/translations";
 
@@ -59,6 +59,52 @@ const useFormFields = ({ slug, translation }: Props) => {
       placeholder: translation.auth.register.confirmPassword.placeholder,
     },
   ];
+  // this is the profile form fields
+  const profileFields = (): IFormField[] => [
+    {
+      label: translation.profile.form.name.label,
+      name: "name",
+      type: "text",
+      placeholder: translation.profile.form.name.placeholder,
+      autoFocus: true,
+    },
+    {
+      label: translation.profile.form.email.label,
+      name: "email",
+      type: "email",
+      placeholder: translation.profile.form.email.placeholder,
+    },
+    {
+      label: translation.profile.form.phone.label,
+      name: "phone",
+      type: "text",
+      placeholder: translation.profile.form.phone.placeholder,
+    },
+    {
+      label: translation.profile.form.address.label,
+      name: "streetAddress",
+      type: "text",
+      placeholder: translation.profile.form.address.placeholder,
+    },
+    {
+      label: translation.profile.form.postalCode.label,
+      name: "postalCode",
+      type: "text",
+      placeholder: translation.profile.form.postalCode.placeholder,
+    },
+    {
+      label: translation.profile.form.city.label,
+      name: "city",
+      type: "text",
+      placeholder: translation.profile.form.city.placeholder,
+    },
+    {
+      label: translation.profile.form.country.label,
+      name: "country",
+      type: "text",
+      placeholder: translation.profile.form.country.placeholder,
+    },
+  ];
 
   /**
    * Returns the appropriate form fields array based on the slug.
@@ -71,6 +117,8 @@ const useFormFields = ({ slug, translation }: Props) => {
       // Add more cases for other forms as needed
       case Pages.Register:
         return signUpFields();
+      case Routes.PROFILE:
+        return profileFields();
       default:
         return []; // Return empty array if no matching form
     }
