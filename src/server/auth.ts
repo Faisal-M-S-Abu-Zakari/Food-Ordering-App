@@ -57,7 +57,7 @@ export const authOptions: NextAuthOptions = {
         country: dbUser.country,
         phone: dbUser.phone,
         postalCode: dbUser.postalCode,
-        streetAddress: dbUser.streetAdress,
+        streetAddress: dbUser.streetAddress,
       };
     },
     // the token here is come from the jwt
@@ -73,7 +73,7 @@ export const authOptions: NextAuthOptions = {
         session.user.country = token.country as string;
         session.user.city = token.city as string;
         session.user.postalCode = token.postalCode as string;
-        session.user.streetAdress = token.streetAddress as string;
+        session.user.streetAddress = token.streetAddress as string;
         session.user.phone = token.phone as string;
       }
       // after i determine the session i will return it , and return the user

@@ -94,7 +94,6 @@ const EditUserForm = ({
   useEffect(() => {
     setSelectedImage(user.image as string);
   }, [user.image]);
-
   return (
     <form action={action} className="flex flex-col md:flex-row gap-10">
       <div className="group relative w-[200px] h-[200px] overflow-hidden rounded-full mx-auto">

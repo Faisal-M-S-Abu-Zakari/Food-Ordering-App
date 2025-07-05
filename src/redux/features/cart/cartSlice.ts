@@ -18,7 +18,8 @@ type CartState = {
 };
 
 // i want to save my state in localStorage
-const initialCartItems = localStorage.getItem("cartItems");
+const initialCartItems =
+  typeof window !== "undefined" ? localStorage.getItem("cartItems") : null;
 const initialState: CartState = {
   // here i will fetch the items from local storage if founded , and parse them because they are string in localStorage
   items: initialCartItems ? JSON.parse(initialCartItems) : [],

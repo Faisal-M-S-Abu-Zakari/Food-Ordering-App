@@ -85,23 +85,23 @@ model Category {
 // to make order , you need user ... so create the user model
 // after creating the order model , you will find that each user has many order . make the relationship between the user and the product that he orderd (the quantity)
 model User {
-  id           String         @id @default(uuid())
-  email        String         @unique
-  password     String
-  name         String
-  image        String?
-  phone        String?
-  streetAdress String?
-  postalCode   String?
-  city         String?
-  country      String?
-  role         UserRole       @default(USER)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  name          String
+  image         String?
+  phone         String?
+  streetAddress String?
+  postalCode    String?
+  city          String?
+  country       String?
+  role          UserRole       @default(USER)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   // each user has many order product
-  orders       OrderProduct[]
-  accounts     Account[]
-  session      Session[]
+  orders        OrderProduct[]
+  accounts      Account[]
+  session       Session[]
 }
 
 enum UserRole {
@@ -111,21 +111,21 @@ enum UserRole {
 
 // we need order model to render the data in order page , and you will find that we can determine the quantity . so , i need to make relationship with order product 
 model Order {
-  id           String         @id @default(uuid())
-  paid         Boolean        @default(false)
-  subTotal     Float
-  deliveryFee  Float
-  totalPrice   Float
-  userEmail    String
-  phone        String
-  streetAdress String
-  postalCode   String
-  city         String
-  country      String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id            String         @id @default(uuid())
+  paid          Boolean        @default(false)
+  subTotal      Float
+  deliveryFee   Float
+  totalPrice    Float
+  userEmail     String
+  phone         String
+  streetAddress String
+  postalCode    String
+  city          String
+  country       String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   // هان ما استدعيت مودل المنتج لانه انا بدي عدد المنتج المطلوبة (التي تم شراءها)
-  products     OrderProduct[]
+  products      OrderProduct[]
 }
 
 // فصلتها لوحدها لانه ممكن يكبر معك المشروع لذلك الافضل تفصلها 

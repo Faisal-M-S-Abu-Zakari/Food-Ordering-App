@@ -1,10 +1,11 @@
 "use server";
-import { Pages, Routes, UserRole } from "@/constants/enums";
+import { Pages, Routes } from "@/constants/enums";
 import { getCurrentLocale } from "@/lib/getCurrentLocale";
 import { db } from "@/lib/prisma";
 import getTrans from "@/lib/translation";
 import { updateProfileSchema } from "@/validations/profile";
 import { revalidatePath } from "next/cache";
+import { UserRole } from "../../../../generated/prisma";
 
 export const updateProfile = async (
   isAdmin: boolean,
@@ -30,6 +31,7 @@ export const updateProfile = async (
   const imageUrl = Boolean(imageFile.size)
     ? await getImageUrl(imageFile)
     : undefined;
+
   //   now call the DB
   try {
     // check if user exist
@@ -62,6 +64,7 @@ export const updateProfile = async (
         role: isAdmin ? UserRole.ADMIN : UserRole.USER,
       },
     });
+    console.log(user);
     // الان لو كان الاسم فيصل و غيرته لاحمد و عملت حفظ , فإن الاسم يلي هيظهر هو فيصل و لما اعمل ريفريش بيرجع احمد
     // يبقى في جزئية كاش هان لازم اعدلها
     revalidatePath(`/${locale}/${Routes.PROFILE}`);
@@ -81,6 +84,7 @@ export const updateProfile = async (
       message: translations.messages.updateProfileSucess,
     };
   } catch (error) {
+    console.error("Profile update error:", error);
     return {
       status: 500,
       message: translations.messages.unexpectedError,
@@ -89,34 +93,29 @@ export const updateProfile = async (
 };
 
 // this function will return the url after it be uploaded in cloud storage
-// it will be async ==> because it will deal with api ,and this api will return the image url
-// 1- npm i cloudinary
-// 2- create cloudinary file in lib folder
-// 3- Add the constants to the (.env) file
-// 4- generate an api key
+// Direct cloudinary upload without HTTP request
+import cloudinary from "@/lib/cloudinary";
+
 const getImageUrl = async (imageFile: File) => {
-  // create form that will has file and pathNAme
-  const formData = new FormData();
-  // the 2 append down i will get them in api
-  // here append the inpu with name file with the imageFile
-  formData.append("file", imageFile);
-  // here i determine the pathName tp be profile_images in cloudinary
-  formData.append("pathName", "profile_images");
-  // call the api
   try {
-    const response = await fetch(
-      // add the domain here
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`,
+    // Convert file to buffer
+    const fileBuffer = await imageFile.arrayBuffer();
+    const base64File = Buffer.from(fileBuffer).toString("base64");
+
+    // Upload directly to cloudinary
+    const uploadResponse = await cloudinary.uploader.upload(
+      `data:${imageFile.type};base64,${base64File}`,
       {
-        method: "POST",
-        body: formData,
+        folder: "profile_images",
+        transformation: [
+          { width: 200, height: 200, crop: "fill", gravity: "face" },
+        ],
       }
     );
-    // this response will return json
-    const image = (await response.json()) as { url: string };
-    // then return the url
-    return image.url;
+
+    return uploadResponse.secure_url;
   } catch (error) {
     console.error("Error uploading file to Cloudinary:", error);
+    return undefined;
   }
 };
