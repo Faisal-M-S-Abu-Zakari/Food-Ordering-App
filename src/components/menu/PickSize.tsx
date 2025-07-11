@@ -31,7 +31,7 @@ function PickSize({ sizes, item, selectedSize, setSelecedtSize }: ISize) {
             id={size.id}
           />
           <Label htmlFor={size.id}>
-            {size.name} {formateCurrency(size.price + item.basePrise)}
+            {size.name} {formateCurrency(size.price + item.basePrice)}
           </Label>
         </div>
       ))}

@@ -46,7 +46,7 @@ const ChooseQuantity = ({
               addCartItem({
                 name: item.name,
                 id: item.id,
-                basePrise: item.basePrise,
+                basePrice: item.basePrice,
                 image: item.image,
                 Size: selectedSize,
                 extras: selectedExtras,

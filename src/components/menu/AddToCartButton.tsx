@@ -44,7 +44,7 @@ const AddToCartButton = ({ item }: Item) => {
   const defaultExtra = cart.find((el) => el.id === item.id)?.extras || [];
   const [selectedExtras, setSelecedtExtras] = useState<Extra[]>(defaultExtra!);
   // here i want to handle the total price to be affected with extras and sizes
-  let totalPrice = item.basePrise;
+  let totalPrice = item.basePrice;
   // here if the user select size , then change the total
   if (selectedSize) {
     totalPrice += selectedSize.price;
@@ -63,7 +63,7 @@ const AddToCartButton = ({ item }: Item) => {
     dispatch(
       addCartItem({
         // i don't need to send the quantity , because the action will handle it
-        basePrise: item.basePrise,
+        basePrice: item.basePrice,
         id: item.id,
         name: item.name,
         image: item.image,

@@ -51,3 +51,34 @@ export const getBestSallers = cache(
   //   if you want to revalidate the cache before 1 hour ==> ctrl+shift+R
   { revalidate: 3600 }
 );
+
+// هاد الفنكشن استخدمتها في صفحة المينيو تبعت الادمن لحتى يرجع كل المنتجات
+export const getProducts = cache(
+  () => {
+    const products = db.product.findMany({
+      orderBy: {
+        order: "asc",
+      },
+    });
+    return products;
+  },
+  ["products"],
+  { revalidate: 3600 }
+);
+// هاد الفنكشن عشان توصل للمنتج بناء على الاي دي و تعمل عليه التعديلات
+export const getProduct = cache(
+  (id: string) => {
+    const product = db.product.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        sizes: true,
+        extras: true,
+      },
+    });
+    return product;
+  },
+  [`product-${crypto.randomUUID()}`],
+  { revalidate: 3600 }
+);

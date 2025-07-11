@@ -105,7 +105,27 @@ const useFormFields = ({ slug, translation }: Props) => {
       placeholder: translation.profile.form.country.placeholder,
     },
   ];
-
+  const addProductFields = (): IFormField[] => [
+    {
+      label: translation.admin["menu-items"].form.name.label,
+      name: "name",
+      type: "text",
+      placeholder: translation.admin["menu-items"].form.name.placeholder,
+      autoFocus: true,
+    },
+    {
+      label: translation.admin["menu-items"].form.description.label,
+      name: "description",
+      type: "text",
+      placeholder: translation.admin["menu-items"].form.description.placeholder,
+    },
+    {
+      label: translation.admin["menu-items"].form.basePrice.label,
+      name: "basePrice",
+      type: "text",
+      placeholder: translation.admin["menu-items"].form.basePrice.placeholder,
+    },
+  ];
   /**
    * Returns the appropriate form fields array based on the slug.
    * Extend this switch to support more forms (e.g., signup, forgot password).
@@ -119,6 +139,8 @@ const useFormFields = ({ slug, translation }: Props) => {
         return signUpFields();
       case Routes.PROFILE:
         return profileFields();
+      case `${Routes.ADMIN}/${Pages.MENU_ITEMS}`:
+        return addProductFields();
       default:
         return []; // Return empty array if no matching form
     }

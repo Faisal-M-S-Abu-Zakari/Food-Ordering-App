@@ -30,7 +30,7 @@ export const getSubTotal = (cart: CartItem[]) => {
     );
     // then i have to add them all togther to get the total price for each item
     const itemTotal =
-      (extraTotal || 0) + cartItem.basePrise + (cartItem.Size?.price || 0);
+      (extraTotal || 0) + cartItem.basePrice + (cartItem.Size?.price || 0);
     // then i will return the total price for all items in the cart
     // if i bought the item more than one time ,so i need to add the quantity ( itemTotal * cartItem.quantity! )
     return total + itemTotal * cartItem.quantity!;

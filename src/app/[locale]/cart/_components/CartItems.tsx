@@ -68,7 +68,7 @@ function CartItems() {
                   </div>
                   <div className="flex-1 flex items-center gap-4 justify-end">
                     <strong className="text-black ">
-                      {formateCurrency(item.basePrise)}
+                      {formateCurrency(item.basePrice)}
                     </strong>
                     <Button
                       onClick={() =>

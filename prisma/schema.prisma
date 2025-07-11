@@ -24,8 +24,8 @@ model Product {
   description String
   image       String
   // this order for the product , how they will look on app
-  order       Int
-  basePrise   Float
+  order       Int    @default(autoincrement())
+  basePrice   Float
 
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt
@@ -44,7 +44,7 @@ model Size {
   name      ProductSizes
   price     Float
   // يتم انشاءها تلقائي عند اضافة العلاقة فوق
-  product   Product      @relation(fields: [productId], references: [id])
+  product   Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
 }
 
@@ -62,7 +62,7 @@ model Extra {
   name      ExtraIngrediants
   price     Float
   // يتم انشاءها تلقائي عند اضافة العلاقة فوق
-  product   Product          @relation(fields: [productId], references: [id])
+  product   Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
 }
 
